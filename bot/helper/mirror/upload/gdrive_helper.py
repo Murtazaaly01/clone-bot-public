@@ -831,7 +831,7 @@ class GoogleDriveHelper:
 
         msg = f"<b>Found {contents_count} result for <i>{fileName}</i></b>"
         buttons = ButtonMaker()
-        buttons.buildbutton("🔎 VIEW", f"https://telegra.ph/{path[0]}")
+        buttons.buildbutton("🔎 VIEW", f"https://{telegraph.api_url}/{path[0]}")
 
         return msg, InlineKeyboardMarkup(buttons.build_menu(1))
 
@@ -937,7 +937,7 @@ class GoogleDriveHelper:
             return msg, "", "", ""
         return "", size, name, files
 
-    def download(self, link):
+    def download(self, link, new_name=None):
         self.is_downloading = True
         file_id = self.__getIdFromUrl(link)
         self.updater = setInterval(self.update_interval, self._on_download_progress)
@@ -971,7 +971,7 @@ class GoogleDriveHelper:
             self.updater.cancel()
             if self.is_cancelled:
                 return
-        self.__listener.onDownloadComplete()
+        self.__listener.onDownloadComplete(new_name)
 
     def __download_folder(self, folder_id, path, folder_name):
         folder_name = folder_name.replace("/", "")
